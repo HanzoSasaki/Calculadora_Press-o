@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Lucro para Fardos de Areia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+       
+            <button class="open-modal-btn" id="openModal">
+                <i class="fas fa-edit"></i> Inserir Dados da Operação
+            </button>
+        </header>
+        
+        <div class="modal" id="dataModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Configurar Parâmetros</h2>
+                    <button class="close-btn" id="closeModal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group">
+                        <label for="quantity"><i class="fas fa-boxes"></i> Quantidade de Fardos</label>
+                        <input type="number" id="quantity" value="1180" min="1">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="cost"><i class="fas fa-money-bill-wave"></i> Custo por Fardo (R$)</label>
+                        <input type="number" id="cost" step="0.01" value="11.16" min="0">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="price"><i class="fas fa-tag"></i> Preço de Venda por Fardo (R$)</label>
+                        <input type="number" id="price" step="0.01" value="29.99" min="0">
+                    </div>
+                    
+                    <h3 style="margin: 30px 0 20px; color: #2c3e50; border-bottom: 1px solid #eee; padding-bottom: 12px; display: flex; align-items: center; gap: 10px;">
+                        <i class="fas fa-file-invoice-dollar"></i> Custos da Plataforma
+                    </h3>
+                    
+                    <div class="input-group">
+                        <label for="commission"><i class="fas fa-percentage"></i> Comissão (%)</label>
+                        <input type="number" id="commission" value="20" min="0" max="100">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="tax"><i class="fas fa-landmark"></i> Imposto (%)</label>
+                        <input type="number" id="tax" value="1.08" min="0" max="100">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="fixed-fee"><i class="fas fa-receipt"></i> Taxa Fixa por Venda (R$)</label>
+                        <input type="number" id="fixed-fee" step="0.01" value="4.00" min="0">
+                    </div>
+                    
+                    <button id="calculate" class="calculate-btn">
+                        <i class="fas fa-calculator"></i> Calcular Resultados
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="results-container">
+            <!-- Seção de Análise por Fardo -->
+            <div class="per-fardo-section">
+                <h2 class="section-title">
+                    <i class="fas fa-box-open"></i> Análise Detalhada por Fardo
+                </h2>
+                
+                <div class="per-fardo-grid">
+                    <div class="per-fardo-card">
+                        <div class="card-title">
+                            <i class="fas fa-money-bill-wave"></i> Custo do Fardo
+                        </div>
+                        <div id="cost-per-fardo" class="card-value">R$ 11,16</div>
+                    </div>
+                    
+                    <div class="per-fardo-card">
+                        <div class="card-title">
+                            <i class="fas fa-tag"></i> Preço de Venda
+                        </div>
+                        <div id="price-per-fardo" class="card-value">R$ 29,99</div>
+                    </div>
+                    
+                    <div class="per-fardo-card">
+                        <div class="card-title">
+                            <i class="fas fa-file-invoice-dollar"></i> Comissão
+                        </div>
+                        <div id="commission-per-fardo" class="card-value">R$ 6,00</div>
+                    </div>
+                    
+                    <div class="per-fardo-card">
+                        <div class="card-title">
+                            <i class="fas fa-landmark"></i> Imposto
+                        </div>
+                        <div id="tax-per-fardo" class="card-value">R$ 0,32</div>
+                    </div>
+                    
+                    <div class="per-fardo-card">
+                        <div class="card-title">
+                            <i class="fas fa-receipt"></i> Taxa Fixa
+                        </div>
+                        <div id="fixed-fee-per-fardo" class="card-value">R$ 4,00</div>
+                    </div>
+                    
+                    <div class="per-fardo-card">
+                        <div class="card-title">
+                            <i class="fas fa-file-invoice"></i> Custo Total da Plataforma
+                        </div>
+                        <div id="platform-cost-per-fardo" class="card-value">R$ 10,32</div>
+                    </div>
+                    
+                    <div class="per-fardo-card positive">
+                        <div class="card-title">
+                            <i class="fas fa-chart-line"></i> Lucro Bruto
+                        </div>
+                        <div id="gross-profit-per-fardo" class="card-value profit-positive">R$ 18,83</div>
+                    </div>
+                    
+                    <div class="per-fardo-card positive">
+                        <div class="card-title">
+                            <i class="fas fa-coins"></i> Lucro Líquido
+                        </div>
+                        <div id="net-profit-per-fardo" class="card-value profit-positive">R$ 8,51</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Seção de Resultados Financeiros -->
+            <div class="details-section">
+                <h2 class="section-title">
+                    <i class="fas fa-file-invoice-dollar"></i> Análise Financeira Completa
+                </h2>
+                
+                <div class="details-grid">
+                    <div class="details-card">
+                        <h3><i class="fas fa-boxes"></i> Custos da Operação</h3>
+                        
+                        <div class="detail-row">
+                            <div class="detail-label">
+                                <i class="fas fa-box"></i> Quantidade de Fardos
+                            </div>
+                            <div id="quantity-display" class="detail-value">1.180</div>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <div class="detail-label">
+                                <i class="fas fa-money-bill-wave"></i> Custo Total da Areia
+                            </div>
+                            <div id="total-sand-cost" class="detail-value">R$ 13.168,80</div>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <div class="detail-label">
+                                <i class="fas fa-file-invoice-dollar"></i> Custo Total da Plataforma
+                            </div>
+                            <div id="total-platform-cost" class="detail-value">R$ 12.177,60</div>
+                        </div>
+                        
+                        <div class="detail-row highlight-row">
+                            <div class="detail-label">
+                                <i class="fas fa-money-bill"></i> Custo Total da Operação
+                            </div>
+                            <div id="total-operation-cost" class="detail-value">R$ 25.346,40</div>
+                        </div>
+                    </div>
+                    
+                    <div class="details-card">
+                        <h3><i class="fas fa-chart-line"></i> Receitas e Lucros</h3>
+                        
+                        <div class="detail-row">
+                            <div class="detail-label">
+                                <i class="fas fa-tags"></i> Receita Total de Vendas
+                            </div>
+                            <div id="total-revenue" class="detail-value">R$ 35.388,20</div>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <div class="detail-label">
+                                <i class="fas fa-chart-bar"></i> Lucro Bruto Total
+                            </div>
+                            <div id="total-gross-profit" class="detail-value profit-positive">R$ 22.219,40</div>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <div class="detail-label">
+                                <i class="fas fa-coins"></i> Lucro Líquido Total
+                            </div>
+                            <div id="total-net-profit" class="detail-value profit-positive">R$ 10.041,80</div>
+                        </div>
+                        
+                        <div class="detail-row highlight-row">
+                            <div class="detail-label">
+                                <i class="fas fa-percentage"></i> Margem de Lucro Líquido
+                            </div>
+                            <div id="profit-margin" class="detail-value profit-positive">28,37%</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 style="margin: 30px 0 20px; color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-list-alt"></i> Detalhamento de Custos por Fardo
+                </h3>
+                
+                <table class="summary-table">
+                    <thead>
+                        <tr>
+                            <th>Descrição</th>
+                            <th>Valor por Fardo</th>
+                            <th>Cálculo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Custo do Fardo</td>
+                            <td id="detail-cost-per-fardo">R$ 11,16</td>
+                            <td>Valor direto</td>
+                        </tr>
+                        <tr>
+                            <td>Comissão da Plataforma (20%)</td>
+                            <td id="detail-commission-per-fardo">R$ 6,00</td>
+                            <td>29,99 × 20%</td>
+                        </tr>
+                        <tr>
+                            <td>Imposto (1,08%)</td>
+                            <td id="detail-tax-per-fardo">R$ 0,32</td>
+                            <td>29,99 × 1,08%</td>
+                        </tr>
+                        <tr>
+                            <td>Taxa Fixa</td>
+                            <td id="detail-fixed-fee-per-fardo">R$ 4,00</td>
+                            <td>Valor fixo</td>
+                        </tr>
+                        <tr class="highlight">
+                            <td>Custo Total da Plataforma</td>
+                            <td id="detail-platform-cost-per-fardo">R$ 10,32</td>
+                            <td>6,00 + 0,32 + 4,00</td>
+                        </tr>
+                        <tr>
+                            <td>Preço de Venda</td>
+                            <td id="detail-price-per-fardo">R$ 29,99</td>
+                            <td>Valor direto</td>
+                        </tr>
+                        <tr class="highlight">
+                            <td>Lucro Bruto</td>
+                            <td id="detail-gross-profit-per-fardo" class="profit-positive">R$ 18,83</td>
+                            <td>29,99 - 11,16</td>
+                        </tr>
+                        <tr class="highlight">
+                            <td>Lucro Líquido</td>
+                            <td id="detail-net-profit-per-fardo" class="profit-positive">R$ 8,51</td>
+                            <td>29,99 - 11,16 - 10,32</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+      
+    </div>
+    
+    <script src="script.js">  </script>
+</body>
+</html>
